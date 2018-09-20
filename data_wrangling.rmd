@@ -1,0 +1,108 @@
+---
+title: "P8105 Data Wrangling"
+author: "Quinton Neville"
+date: "September 17, 2018"
+header-includes: 
+  \usepackage{graphicx}
+  \usepackage{float}
+output:
+   #github_document 
+  #word_document: default
+  html_document: default
+  #pdf_document: default
+---
+
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
+#Load necessary packages
+library(tidyverse)
+```
+
+
+#Data Import
+```{r}
+fas.litter.df <- read_csv(file = "./data_import_examples/FAS_litters.csv")
+#str(fas.litter.df)
+
+pups.df <- read_csv("./data_import_examples/FAS_pups.csv",
+  col_types = "ciiiii")
+pups.df <- janitor::clean_names(pups.df)
+
+#Check messy names
+names(fas.litter.df)
+
+#Tidy names
+fas.litter.df <- janitor::clean_names(fas.litter.df)
+
+#Check, clean names
+names(fas.litter.df)
+
+#Skim the data!
+skimr::skim(fas.litter.df)
+
+##NOTE can also supply col_names = T/F, na = T/F, and skip = n; to read_*
+
+##Long hand specifying column types
+#  col_types = cols(
+#    Group = col_character(),
+#    `Litter Number` = col_character(),
+#    `GD0 weight` = col_double(),
+#    `GD12 weight` = col_double(),
+#    `GD of Birth` = col_integer(),
+#    `Pups born alive` = col_integer(),
+#    `Pups dead @ birth` = col_integer(),
+#    `Pups survive` = col_integer()
+#  )
+
+##Shorthand specifying column types
+
+#col_types = "ccddiiii"
+
+```
+
+```{r}
+#Excel files
+library(readxl)
+mlb11_data = read_excel("./data_import_examples/mlb11.xlsx", n_max = 20)
+head(mlb11_data, 5)
+
+#SAS files??
+library(haven)
+pulse_data = read_sas("./data_import_examples/public_pulse_data.sas7bdat")
+head(pulse_data, 5)
+
+
+
+```
+
+```{r}
+#Minimize the amount printed??
+options(tibble.print_min = 3)
+
+#for the select function in dplyr we have
+#select(df, varname, everything()) 
+#re orders the frame with varname first, everything else same and no duplicates
+
+#This site has all the helpers for select with explanation/reference
+#https://dplyr.tidyverse.org/reference/select_helpers.html
+
+#FILTER OBSERVATIONS
+
+#as;ldfkj
+new.pup.df <- pups.df %>%
+  filter(sex == 1)
+
+#as;dlkfj
+new.pup.df2 <- pups.df %>%
+  filter(sex == 2,
+         pd_walk < 11)
+
+#Same as above, if you're filtering by more than 2 probably just use the comma version
+new.pup.df3 <- pups.df %>%
+  filter(sex == 2 & pd_walk < 11)
+
+#MUTATE
+#change variable, make new variables, etc.
+
+#functions tolower() takes char vec and turns everything to lower case, handy.
+
+```
